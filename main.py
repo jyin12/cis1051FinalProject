@@ -35,6 +35,10 @@ def check_collision(gates):
         return False
     return True
 
+def rotate_totoro(totoro):
+    new_totoro = pygame.transform.rotozoom(totoro, totoro_movement, 1)
+    return new_totoro
+
 pygame.init()
 screen = pygame.display.set_mode((576, 780))  # will change screen size later
 frames = pygame.time.Clock()
@@ -91,8 +95,9 @@ while True:
     if game_active:
         # Totoro
         totoro_movement += gravity # so the totoro can have the "jump" effect
+        rotated_totoro = rotate_totoro(totoro)
         totoro_rect.centery += totoro_movement
-        screen.blit(totoro, totoro_rect)
+        screen.blit(rotated_totoro, totoro_rect)
         game_active = check_collision(gate_list)
 
         # Gates
