@@ -36,7 +36,7 @@ def check_collision(gates):
     return True
 
 def rotate_totoro(totoro):
-    new_totoro = pygame.transform.rotozoom(totoro, totoro_movement, 1)
+    new_totoro = pygame.transform.rotozoom(totoro, -totoro_movement * 3, 1)  # need to multiply by 2 b/c it gives the "turn" effects
     return new_totoro
 
 pygame.init()
@@ -59,11 +59,11 @@ base_x_pos = 0
 
 # the "bird"
 totoro = pygame.image.load('images/catbus.png')  # not convert() since it's for surfaces that have no transparency
-totoro = pygame.transform.scale(totoro, (60, 80))
+totoro = pygame.transform.scale(totoro, (40, 60))
 totoro_rect = totoro.get_rect(center=(100, 390))
 
 # the torii gates as the pipes
-gate = pygame.image.load('images/torii-gate.png')
+gate = pygame.image.load('images/torii-gate.png').convert()
 gate = pygame.transform.scale(gate, (150, 410))
 gate_list = []  # continues to make the gates
 SPAWNGATE = pygame.USEREVENT
