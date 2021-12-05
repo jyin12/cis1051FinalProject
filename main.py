@@ -1,5 +1,4 @@
 import random
-
 import pygame
 import sys
 
@@ -16,7 +15,7 @@ def create_gate():
 
 def move_gates(gates):
     for g in gates:
-        g.centerx -= 5  # gets the coordinate from gate list and move a little to the left
+        g.centerx -= 3  # gets the coordinate from gate list and move a little to the left (higher # = faster it moves)
     return gates  # returns a new list
 
 def draw_gates(gates):
@@ -34,6 +33,21 @@ def check_collision(gates):
     if totoro_rect.top <= -100 or totoro_rect.bottom >= 680:
         return False
     return True
+
+def create_coin():
+    random_coin_pos = random.choice(coin_height)
+    bottom_coin = gate.get_rect(midtop=(950, random_coin_pos))  # coordinate is the middle of the screen on top
+    top_coin = gate.get_rect(midbottom=(300, random_coin_pos - 600))  # Cannot delete, shows error for some reason (place the top coin off the screen)
+    return bottom_coin, top_coin
+
+def move_coins(coins):
+    for g in coins:
+        g.centerx -= 3  # gets the coordinate from gate list and move a little to the left
+    return coins  # returns a new list
+
+def draw_coins(coins):
+    for g in coins:
+        screen.blit(coin, g)
 
 def rotate_totoro(totoro):
     new_totoro = pygame.transform.rotozoom(totoro, -totoro_movement * 3, 1)  # need to multiply by 2 b/c it gives the "turn" effects
@@ -80,7 +94,7 @@ base = pygame.transform.scale(base, (576, 500))
 base_x_pos = 0
 
 # the "bird"
-totoro = pygame.image.load('images/catbus.png').convert_alpha()  # not convert() since it's for surfaces that have no transparency
+totoro = pygame.image.load('images/catbus.png').convert_alpha()  # convert_alpha() since it's for surfaces that have no transparency
 totoro = pygame.transform.scale(totoro, (40, 60))
 totoro_rect = totoro.get_rect(center=(100, 390))
 
@@ -89,13 +103,21 @@ gate = pygame.image.load('images/torii-gate.png').convert_alpha()
 gate = pygame.transform.scale(gate, (150, 410))
 gate_list = []  # continues to make the gates
 SPAWNGATE = pygame.USEREVENT
-pygame.time.set_timer(SPAWNGATE, 1500)
+pygame.time.set_timer(SPAWNGATE, 2000)  # when the first gate will show up (in ms)
 gate_height = [380, 410, 450]
 
 # Game over page
 game_over = pygame.image.load('images/game-title-removebg-preview.png').convert_alpha()
 game_over = pygame.transform.scale(game_over, (350, 80))
 game_over_rect = game_over.get_rect(center=(288, 390))
+
+# Coins
+coin = pygame.image.load('images/goldCoin/goldCoin5.png').convert_alpha()
+coin = pygame.transform.scale(coin, (50, 50))
+coin_list = []
+SPAWNCOIN = pygame.USEREVENT
+pygame.time.set_timer(SPAWNCOIN, 2000)  # time (in ms) when the first coin comes out
+coin_height = [250, 270, 290]
 
 while True:
     for game in pygame.event.get():
@@ -111,12 +133,14 @@ while True:
             if game.key == pygame.K_SPACE and game_active == False:
                 game_active = True
                 gate_list.clear()  # clears list so that gates don't appear in a bunch from previous game
+                coin_list.clear()
                 totoro_rect.center = (100, 390)  # re-centers the bird
                 totoro_movement = 0
                 score = 0  # resets the score board everytime a new game starts
 
-        if game.type == SPAWNGATE:
+        if game.type == SPAWNGATE and game.type == SPAWNCOIN:
             gate_list.extend(create_gate())  # every 1.2s, it creates another gate and stores into create_gate list
+            coin_list.extend(create_coin())
 
     screen.blit(background, (0, 0))  # coordinate system: (from left, from top)
 
@@ -131,6 +155,10 @@ while True:
         # Gates
         gate_list = move_gates(gate_list)
         draw_gates(gate_list)
+
+        # Coins
+        coin_list = move_coins(coin_list)
+        draw_coins(coin_list)
 
         score += 0.01
         display_score('game_start')
