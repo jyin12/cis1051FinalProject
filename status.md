@@ -10,7 +10,7 @@ Sai Shi, if asking for TA's name
 
 #### Project title
 
-Inspired from Studio Ghibli, "Golden Ghibli"
+Inspired from Studio Ghibli, "Flying Totoro"
 
 ***
 

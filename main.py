@@ -39,14 +39,36 @@ def rotate_totoro(totoro):
     new_totoro = pygame.transform.rotozoom(totoro, -totoro_movement * 3, 1)  # need to multiply by 2 b/c it gives the "turn" effects
     return new_totoro
 
+def display_score(game_state):
+    if game_state == 'game_start':
+        score_surface = game_font.render(str(int(score)), True, (255, 255, 255))
+        score_rect = score_surface.get_rect(center=(288, 100))
+        screen.blit(score_surface, score_rect)
+    if game_state == 'game_over':
+        score_surface = game_font.render(f'Score: {int(score)}', True, (255, 255, 255))
+        score_rect = score_surface.get_rect(center=(288, 100))
+        screen.blit(score_surface, score_rect)
+
+        hi_score_surface = game_font.render(f'High Score: {int(high_score)}', True, (255, 255, 255))
+        hi_score_rect = hi_score_surface.get_rect(center=(288, 600))
+        screen.blit(hi_score_surface, hi_score_rect)
+
+def score_update(score, high_score):
+    if score > high_score:
+        high_score = score
+    return high_score
+
 pygame.init()
 screen = pygame.display.set_mode((576, 780))  # will change screen size later
 frames = pygame.time.Clock()
+game_font = pygame.font.Font('magilio-font/MagilioRegular-Yzv2O.ttf',35)  # (fontStyle file, fontSize)
 
 # Game variables
 gravity = 0.25
 totoro_movement = 0
 game_active = True
+score = 0
+high_score = 0
 
 # background image
 background = pygame.image.load('images/bg-1.jpg').convert()
@@ -58,17 +80,22 @@ base = pygame.transform.scale(base, (576, 500))
 base_x_pos = 0
 
 # the "bird"
-totoro = pygame.image.load('images/catbus.png')  # not convert() since it's for surfaces that have no transparency
+totoro = pygame.image.load('images/catbus.png').convert_alpha()  # not convert() since it's for surfaces that have no transparency
 totoro = pygame.transform.scale(totoro, (40, 60))
 totoro_rect = totoro.get_rect(center=(100, 390))
 
 # the torii gates as the pipes
-gate = pygame.image.load('images/torii-gate.png').convert()
+gate = pygame.image.load('images/torii-gate.png').convert_alpha()
 gate = pygame.transform.scale(gate, (150, 410))
 gate_list = []  # continues to make the gates
 SPAWNGATE = pygame.USEREVENT
-pygame.time.set_timer(SPAWNGATE, 1200)
+pygame.time.set_timer(SPAWNGATE, 1500)
 gate_height = [380, 410, 450]
+
+# Game over page
+game_over = pygame.image.load('images/game-title-removebg-preview.png').convert_alpha()
+game_over = pygame.transform.scale(game_over, (350, 80))
+game_over_rect = game_over.get_rect(center=(288, 390))
 
 while True:
     for game in pygame.event.get():
@@ -86,6 +113,7 @@ while True:
                 gate_list.clear()  # clears list so that gates don't appear in a bunch from previous game
                 totoro_rect.center = (100, 390)  # re-centers the bird
                 totoro_movement = 0
+                score = 0  # resets the score board everytime a new game starts
 
         if game.type == SPAWNGATE:
             gate_list.extend(create_gate())  # every 1.2s, it creates another gate and stores into create_gate list
@@ -104,11 +132,20 @@ while True:
         gate_list = move_gates(gate_list)
         draw_gates(gate_list)
 
+        score += 0.01
+        display_score('game_start')
+
+    else:
+        screen.blit(game_over, game_over_rect)
+        high_score = score_update(score, high_score)
+        display_score('game_over')
+
+
     # The moving "Brick"
-    base_x_pos -= 1  # moves the base to left (higher the number, moves slower)
+    base_x_pos -= 1  # moves the base to left (higher the number, moves faster)
     infinite_base()
     if base_x_pos <= -576:  # if the image is "ending", set the pos back to 0 again
         base_x_pos = 0
 
     pygame.display.update()
-    frames.tick(120)  # 120 is the frame rate
+    frames.tick(115)  # 120 is the frame rate (lower frame rate = slower the game goes, may have to increase gravity)
