@@ -41,13 +41,21 @@ def create_coin():
     return bottom_coin, top_coin
 
 def move_coins(coins):
-    for g in coins:
-        g.centerx -= 3  # gets the coordinate from gate list and move a little to the left
+    for c in coins:
+        c.centerx -= 3  # gets the coordinate from gate list and move a little to the left
     return coins  # returns a new list
 
 def draw_coins(coins):
-    for g in coins:
-        screen.blit(coin, g)
+    for c in coins:
+        screen.blit(coin, c)
+
+def check_collision_coin(coins):
+    for c in coins:
+        if c.colliderect(totoro_rect):
+            coins.remove(c)
+            print("true")
+            return True
+    return False
 
 def rotate_totoro(totoro):
     new_totoro = pygame.transform.rotozoom(totoro, -totoro_movement * 3, 1)  # need to multiply by 2 b/c it gives the "turn" effects
@@ -85,7 +93,7 @@ score = 0
 high_score = 0
 
 # background image
-background = pygame.image.load('images/bg-1.jpg').convert()
+background = pygame.image.load('images/bg-5.jpg').convert()
 background = pygame.transform.scale(background, (576, 780))
 
 # the moving floor
@@ -95,7 +103,7 @@ base_x_pos = 0
 
 # the "bird"
 totoro = pygame.image.load('images/catbus.png').convert_alpha()  # convert_alpha() since it's for surfaces that have no transparency
-totoro = pygame.transform.scale(totoro, (40, 60))
+totoro = pygame.transform.scale(totoro, (50, 70))
 totoro_rect = totoro.get_rect(center=(100, 390))
 
 # the torii gates as the pipes
@@ -159,8 +167,11 @@ while True:
         # Coins
         coin_list = move_coins(coin_list)
         draw_coins(coin_list)
+        if check_collision_coin(coin_list):
+            score += 0.9
+        else:
+            score += 0.01
 
-        score += 0.01
         display_score('game_start')
 
     else:
