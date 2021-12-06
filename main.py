@@ -2,6 +2,10 @@ import random
 import pygame
 import sys
 
+# resources:
+# flappy bird: https://www.youtube.com/watch?v=-BIM0Uq8cj8
+# tokens: https://www.youtube.com/watch?v=qbkj81_BOes
+
 
 def infinite_base():
     screen.blit(base, (base_x_pos, 680))
@@ -85,7 +89,7 @@ frames = pygame.time.Clock()
 game_font = pygame.font.Font('magilio-font/MagilioRegular-Yzv2O.ttf',35)  # (fontStyle file, fontSize)
 
 # Game variables
-gravity = 0.25
+gravity = 0.2
 totoro_movement = 0
 game_active = True
 score = 0
