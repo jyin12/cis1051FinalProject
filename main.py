@@ -1,6 +1,7 @@
 import random
 import pygame
 import sys
+from datetime import datetime
 
 # resources:
 # flappy bird: https://www.youtube.com/watch?v=-BIM0Uq8cj8
@@ -52,6 +53,7 @@ def move_coins(coins):
 def draw_coins(coins):
     for c in coins:
         screen.blit(coin, c)
+        # screen.blit(coin_surface, c)
 
 def check_collision_coin(coins):
     for c in coins:
@@ -94,6 +96,14 @@ totoro_movement = 0
 game_active = True
 score = 0
 high_score = 0
+
+pass_gate = False # TESTER for points passing the gates
+score_gates = 0
+
+# Current time
+curr = datetime.now()
+curr_time = curr.strftime("%H")
+print("Current time = ", curr_time)  # in 24-hr format
 
 # background image
 background = pygame.image.load('images/bg-5.jpg').convert()
@@ -161,6 +171,12 @@ while True:
         rotated_totoro = rotate_totoro(totoro)
         totoro_rect.centery += totoro_movement
         screen.blit(rotated_totoro, totoro_rect)
+
+        """
+        if len(gate_list):
+            if totoro_rect.left >
+        """
+
         game_active = check_collision(gate_list)
 
         # Gates
@@ -170,10 +186,14 @@ while True:
         # Coins
         coin_list = move_coins(coin_list)
         draw_coins(coin_list)
+
         if check_collision_coin(coin_list):
-            score += 0.9
+            # score += 0.9
+            print("Coin")
+
         else:
             score += 0.01
+
 
         display_score('game_start')
 
