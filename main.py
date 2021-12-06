@@ -53,7 +53,6 @@ def check_collision_coin(coins):
     for c in coins:
         if c.colliderect(totoro_rect):
             coins.remove(c)
-            print("true")
             return True
     return False
 
@@ -125,7 +124,7 @@ coin = pygame.transform.scale(coin, (50, 50))
 coin_list = []
 SPAWNCOIN = pygame.USEREVENT
 pygame.time.set_timer(SPAWNCOIN, 2000)  # time (in ms) when the first coin comes out
-coin_height = [250, 270, 290]
+coin_height = [150, 200, 250, 300, 350]
 
 while True:
     for game in pygame.event.get():
