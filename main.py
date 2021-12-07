@@ -190,11 +190,6 @@ while True:
         totoro_rect.centery += totoro_movement
         screen.blit(rotated_totoro, totoro_rect)
 
-        """
-        if len(gate_list):
-            if totoro_rect.left >
-        """
-
         game_active = check_collision(gate_list)
 
         # Gates
@@ -206,8 +201,8 @@ while True:
         draw_coins(coin_list)
 
         if check_collision_coin(coin_list):
-            # score += 0.9
-            print("Coin")
+            score += 0.9
+            # print("Coin")
 
         else:
             score += 0.01
