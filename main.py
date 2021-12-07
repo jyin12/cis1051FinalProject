@@ -102,12 +102,30 @@ score_gates = 0
 
 # Current time
 curr = datetime.now()
-curr_time = curr.strftime("%H")
+# curr_time = int(curr.strftime("%H"))
+curr_time = 20
 print("Current time = ", curr_time)  # in 24-hr format
 
-# background image
+# background image (commented out is the dyanamic background based on system time)
 background = pygame.image.load('images/bg-5.jpg').convert()
 background = pygame.transform.scale(background, (576, 780))
+
+"""
+if curr_time >= 17 or curr_time <= 4:  # need or because time is in 24-hr format and after 23, it resets time to 0 again
+    background = pygame.image.load('images/night2-bg.jpg').convert()
+    background = pygame.transform.scale(background, (576, 780))
+    print("night bg")
+
+elif curr_time > 4 and curr_time <= 12:  # between 4am and 12pm timeframe
+    background = pygame.image.load('images/bg-5.jpg').convert()
+    background = pygame.transform.scale(background, (576, 780))
+    print("day bg")
+
+else:  # between 1pm and 5pm
+    background = pygame.image.load('images/afternoon-bg.jpg').convert()
+    background = pygame.transform.scale(background, (576, 780))
+    print("afternoon bg")
+"""
 
 # the moving floor
 base = pygame.image.load("images/base-1.jfif").convert()
